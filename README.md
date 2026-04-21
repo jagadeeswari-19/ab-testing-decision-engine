@@ -1,119 +1,151 @@
 🚀 A/B Testing Decision Engine
 
-A production-grade platform to analyze A/B experiments, evaluate statistical significance, and generate automated rollout decisions with business impact.
+🔗 Live App: https://ab-testing-decision-engine-qd7pmbjgckxdcj9qkr7o6w.streamlit.app/
 
-🌐 Live Demo (Replit)
-🔗 Application: <YOUR_REPLIT_LINK>
+A production-grade A/B testing platform that delivers instant statistical decisions (0.1s) using both Frequentist and Bayesian methods, along with business impact estimation.
 
-This project is deployed on Replit and runs both the FastAPI backend and Streamlit dashboard in a unified environment.
+📌 Problem Statement
 
-📌 Overview
+Modern experimentation platforms are:
 
-This project provides an end-to-end system for A/B testing:
+⏳ Slow (large CSV processing)
+📊 Hard to interpret (statistical outputs only)
+❌ Lack decision clarity
 
-Upload experiment data (CSV)
-Compute conversion metrics
-Evaluate statistical significance
-Generate rollout decisions
-Store experiment results in a database
-Visualize insights via an interactive dashboard
+This system solves that by providing:
 
-✨ Features
-📊 CSV Upload Interface (Streamlit UI)
-⚡ High-performance FastAPI backend
-📈 Conversion rate & lift calculation
-🧠 Automated decision engine
-💾 SQLite-based experiment tracking
-🔄 Async + parallel processing
-🧪 Extensible statistical methods (Frequentist, Bayesian-ready)
+✅ Instant insights
+✅ Clear rollout decisions
+✅ Business-focused metrics
 
-🏗️ System Architecture
-Streamlit Dashboard (Frontend)
-            ↓
-        FastAPI (Backend)
-            ↓
-   Experiment Service Layer
-            ↓
-   Metrics + Statistical Engine
-            ↓
-        SQLite Database
+⚡ Key Features
+
+🧠 Dual Statistical Engine
+Frequentist: Z-test, p-value, confidence intervals
+Bayesian: Probability treatment is better
+
+⚡ Ultra-Fast Processing (FAANG-style optimization)
+Precomputed aggregates (summary.json)
+No runtime CSV parsing
+~0.1 sec response time
+
+📊 Advanced Visualizations
+Conversion rate comparison
+Lift distribution (Bayesian)
+Probability curves
+Confidence intervals
+
+💼 Business Impact Engine
+Converts lift → revenue impact
+Example:
+Lift: -0.0015 → ₹ -73,979 loss
+
+🎯 Smart Decision System
+if prob > 0.95 → 🚀 ROLLOUT  
+elif prob > 0.80 → ⚠️ TEST MORE  
+else → ❌ DO NOT ROLLOUT
+
+🏗️ Architecture
+                ┌───────────────┐
+                │  Streamlit UI │
+                └──────┬────────┘
+                       │
+                       ▼
+           ┌──────────────────────┐
+           │ Precomputed Summary  │  (JSON)
+           └──────────────────────┘
+                       │
+                       ▼
+        ┌───────────────────────────┐
+        │ Statistical Engine        │
+        │ - Z-test                 │
+        │ - Bayesian inference     │
+        └───────────────────────────┘
+                       │
+                       ▼
+             ┌────────────────┐
+             │ Decision Layer │
+             └────────────────┘
+
 
 📂 Project Structure
 ab_testing_platform/
 │
-├── api/                 # FastAPI routes
-├── services/            # Business logic
-├── core/                # Metrics, decision logic
-├── stats/               # Statistical models
-├── db/                  # Database layer
-├── utils/               # Utilities
-├── features/            # Segmentation
-├── dashboard/           # Streamlit frontend
-├── data/                # Sample datasets
-├── scripts/             # Data scripts
-│
-├── ab_testing.db
+├── app.py                # Streamlit dashboard (main app)
 ├── requirements.txt
-└── README.md
-
-⚙️ Installation (Local Setup)
-git clone <your-repo-url>
-cd ab_testing_platform
-
-python -m venv venv
-venv\Scripts\activate   # Windows
-
-pip install -r requirements.txt
-▶️ Running Locally
-1️⃣ Start Backend
-uvicorn api.main:app --host 127.0.0.1 --port 9000
-2️⃣ Start Frontend
-streamlit run dashboard/app.py
-
-📊 Input Format
-group_name,converted
-control,1
-treatment,0
-
-📈 Sample Output
-Control Rate: 0.1204
-Treatment Rate: 0.1189
-Lift: -0.0015
-Decision: ❌ DO NOT ROLLOUT
-Business Impact: ₹ -73,979
-
-🧠 Decision Logic
-
-The system evaluates:
-
-Conversion rate difference
-Statistical significance
-Expected business impact
-
-🗄️ Database
-SQLite used for experiment tracking
-Stores experiment metrics and decisions
-
-⚡ Performance Optimizations
-Async FastAPI endpoints
-Thread-based execution for heavy tasks
-Efficient data processing using Pandas
-
-🛠️ Tech Stack
-Python
-FastAPI
-Streamlit
-SQLite
-Pandas / NumPy
+├── README.md
+│
+├── data/
+│   └── summary.json      # Precomputed metrics (fast load)
+│
+├── scripts/
+│   └── precompute.py     # Converts CSV → summary.json
+│
+├── api/                  # (Optional FastAPI backend)
+├── services/
+├── db/
 
 
-🔮 Future Enhancements
-Bayesian A/B testing
-Multi-variant experiments (A/B/n)
-User authentication
+⚙️ How It Works
+Step 1: Precompute (offline)
+python scripts/precompute.py
+Step 2: Run App
+streamlit run app.py
+
+
+📊 Example Output
+Metric	Value
+Control Rate	0.1204
+Treatment Rate	0.1189
+Lift	-0.0015
+Decision	❌ DO NOT ROLLOUT
+Impact	₹ -73,979
+
+
+🚀 Deployment
+
+Deployed using Streamlit Cloud
+
+Steps:
+Push code to GitHub
+Connect repo to Streamlit
+Set entry file: app.py
+
+
+🧠 Technical Highlights
+Performance Optimization
+Eliminated CSV bottleneck
+Cached JSON loading
+Vectorized NumPy operations
+Statistical Rigor
+Pooled standard error
+Z-score hypothesis testing
+Bayesian posterior sampling
+Scalability Design
+Decoupled data processing (precompute.py)
+Stateless UI layer
+Ready for API integration
+
+
+📈 Future Improvements (FAANG-level roadmap)
+Real-time experiment tracking (Kafka / streaming)
+Multi-variant testing (A/B/n)
+Sequential testing (early stopping)
 Experiment history dashboard
-Cloud database (PostgreSQL)
+User segmentation analysis
 
-👨‍💻 Author
+
+🏆 Why This Project Stands Out
+
+This project demonstrates:
+
+⚡ Performance engineering
+📊 Statistical depth
+🧠 Product thinking
+💼 Business impact awareness
+🎯 Decision-driven design
+
+
+👩‍💻 Author
 
 Jagadeeswari

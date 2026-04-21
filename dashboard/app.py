@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
-
-API_URL = "http://127.0.0.1:9000"
+API_URL = "https://your-app.up.railway.app"
 
 st.set_page_config(page_title="A/B Testing Platform", layout="wide")
 

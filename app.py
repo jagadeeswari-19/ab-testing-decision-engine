@@ -32,8 +32,23 @@ se = np.sqrt(p_pool * (1 - p_pool) * (1/c_n + 1/t_n))
 z = lift / se
 p_value = 1 - stats.norm.cdf(z)
 
-ci_low = lift - 1.96 * se
-ci_high = lift + 1.96 * se
+# ---------- FORMATTING ----------
+lift_pct = lift * 100
+
+# ---------- UI ----------
+col1, col2, col3, col4 = st.columns(4)
+
+col1.metric("Control Rate", f"{p1:.4f}")
+col2.metric("Treatment Rate", f"{p2:.4f}")
+
+col3.metric(
+    "Lift",
+    f"{lift_pct:.2f}%",
+    delta=f"{lift_pct:.2f}%",
+    delta_color="inverse"   # green if positive, red if negative
+)
+
+col4.metric("P-value", f"{p_value:.5f}")
 
 # ---------- BAYESIAN ----------
 control_samples = np.random.beta(1 + c_sum, 1 + c_n - c_sum, 5000)
@@ -115,3 +130,8 @@ ax4.errorbar(
 ax4.axhline(0)
 ax4.set_title("Confidence Interval")
 st.pyplot(fig4)
+
+if lift > 0:
+    st.success("📈 Treatment improved performance")
+else:
+    st.error("📉 Treatment decreased performance")
